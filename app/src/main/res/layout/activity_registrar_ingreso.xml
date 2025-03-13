@@ -84,7 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="430dp"
             android:layout_marginTop="16dp"
-            tools:listitem="@layout/item_gasto" />
+            tools:listitem="@layout/item_ingreso" />
 
         <!-- Botón Volver sobre el RecyclerView -->
         <Button
