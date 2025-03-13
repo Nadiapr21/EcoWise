@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">EcoWise</string>
+    <string name="login_email">Email</string>
+    <string name="login_password">Contraseña</string>
+    <string name="login_iniciar_sesion"> Iniciar Sesión </string>
+    <string name="login_registrarse"> Registrarse </string>
+    <string name="boton_google"> Iniciar sesión con google </string>
+    <string name="boton_twitter"> Iniciar sesión con twitter </string>
+    <string name="boton_facebook"> Iniciar sesión con facebook </string>
+    <string name="huella_dactilar"> Autenticación biométrica </string>
+    <string name="vision_general"> Visión general </string>
+    <string name="add_gasto"> Nuevo gasto</string>
+    <string name="web_client_id"> 909588111421-nu4mr635p846fnn5fi5graaef2o9l7eg.apps.googleusercontent.com </string>
+    <string name="asset_statements"> </string>
+    <string name="boton_volver"> Volver </string>
+
+</resources>

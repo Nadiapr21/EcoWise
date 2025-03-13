@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <meta-data
+        android:name="com.google.android.gms.auth.api.identity.API_KEY"
+        android:value="@string/default_web_client_id" />
+    <meta-data android:name="asset_statements" android:resource="@string/asset_statements" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_logo_app"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_logo_app"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+        tools:targetApi="31">
+        <activity
+            android:name=".ui.RegistrarIngreso"
+            android:exported="false" />
+        <activity
+            android:name=".ui.RegistrarGasto"
+            android:exported="false" />
+        <activity
+            android:name=".ui.NotasActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.InversionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.PresupuestoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.RecordatoriosActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.GraficosActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.RegistroActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.LoginActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
