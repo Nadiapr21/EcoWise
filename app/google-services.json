@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "909588111421",
+    "project_id": "ecowise-1b387",
+    "storage_bucket": "ecowise-1b387.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:909588111421:android:5145676fea9e398b598a54",
+        "android_client_info": {
+          "package_name": "com.example.ecowise"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "909588111421-nu4mr635p846fnn5fi5graaef2o9l7eg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ecowise",
+            "certificate_hash": "2a96248644baace85d17f8c6359bc1ff7f838043"
+          }
+        },
+        {
+          "client_id": "909588111421-1o53ga2blu8ecmaa1pshi3igojcefoid.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAwCsKL94yLnUotYgDCu5v_5zDdmgr9j8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "909588111421-1o53ga2blu8ecmaa1pshi3igojcefoid.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

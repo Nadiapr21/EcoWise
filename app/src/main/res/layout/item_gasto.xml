@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="10dp"
+    android:backgroundTint="#A4D8F1"
+    app:cardCornerRadius="16dp"
+    android:elevation="10dp">
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginLeft="16dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginBottom="16dp"
+    android:padding="2dp">
+    <TextView
+        android:id="@+id/tvImporte"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_font"
+        android:textSize="20sp"
+        android:text="Importe"
+        android:layout_marginTop="4dp"/>
+    <TextView
+        android:id="@+id/tvCategoria"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/roboto_font"
+        android:text="Categoria"/>
+    <TextView
+        android:id="@+id/tvFecha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_font"
+        android:layout_marginTop="4dp"
+        android:text="Fecha"/>
+
+</LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivEliminar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_trash"
+        android:layout_marginTop="16dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="Eliminar gasto"
+        android:clickable="true"
+        android:focusable="true"/>
+
+
+</RelativeLayout>
+</androidx.cardview.widget.CardView>

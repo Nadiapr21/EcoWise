@@ -1,0 +1,50 @@
+[
+
+  {
+    "challenge": "abc123",
+    "rp": {
+      "name": "Credential Manager example",
+      "id": "credential-manager-test.example.com"
+    },
+    "user": {
+      "id": "def456",
+      "name": "helloandroid@gmail.com",
+      "displayName": "helloandroid@gmail.com"
+    },
+    "pubKeyCredParams": [
+      {
+        "type": "public-key",
+        "alg": -7
+      },
+      {
+        "type": "public-key",
+        "alg": -257
+      }
+    ],
+    "timeout": 1800000,
+    "attestation": "none",
+    "excludeCredentials": [
+      {"id": "ghi789", "type": "public-key"},
+      {"id": "jkl012", "type": "public-key"}
+    ],
+    "authenticatorSelection": {
+      "authenticatorAttachment": "platform",
+      "requireResidentKey": true,
+      "residentKey": "required",
+      "userVerification": "required"
+    }
+  },
+  {
+    "relation" : [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target" : {
+      "namespace" : "android_app",
+      "package_name" : "com.example.android",
+      "sha256_cert_fingerprints" : [
+
+      ]
+    }
+  }
+]
