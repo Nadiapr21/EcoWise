@@ -59,53 +59,77 @@
         app:cardCornerRadius="12dp"
         app:cardElevation="8dp">
 
-        <!-- Dentro del CardView, colocamos un LinearLayout para organizar el contenido -->
-        <LinearLayout
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <!-- CoordinatorLayout dentro del CardView para administrar el RecyclerView y BottomNavigation -->
-            <androidx.coordinatorlayout.widget.CoordinatorLayout
-                android:layout_width="match_parent"
-                android:layout_height="325dp">
+            android:layout_height="match_parent">
 
                 <!-- RecyclerView dentro del CoordinatorLayout -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:clipToPadding="false"
                     android:scrollbars="vertical" />
 
-                <com.google.android.material.bottomnavigation.BottomNavigationView
-                    android:id="@+id/bottomNavigationView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:background="@color/white" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:layout_margin="15dp">
 
-                <!-- BottomNavigationView dentro del CoordinatorLayout -->
-            </androidx.coordinatorlayout.widget.CoordinatorLayout>
-        </LinearLayout>
+                <Button
+                    android:id="@+id/fabAddGasto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:background="@drawable/circle_shape2"
+                    android:drawableStart="@drawable/ic_add2"
+                    android:paddingStart="10dp"
+                    android:elevation="9dp"
+                    android:text="@string/add_gasto"
+                    android:paddingEnd="16dp"
+                    android:layout_marginBottom="130dp"
+                    android:textColor="@color/black"/>
+
+                <Button
+                    android:id="@+id/fabAddIngreso"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/circle_shape"
+                    android:drawableStart="@drawable/ic_add_1"
+                    android:text="@string/add_ingreso"
+                    android:elevation="9dp"
+                    android:paddingStart="10dp"
+                    android:visibility="gone"
+                    android:layout_gravity="end|bottom"
+                    android:layout_marginBottom="80dp"
+                    android:paddingEnd="16dp"
+                    android:textColor="@color/white"/>
+
+
+                <Button
+                    android:id="@+id/fabPrincipal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:elevation="9dp"
+                    android:layout_gravity="end|bottom"
+                    android:background="@drawable/circle_shape"
+                    android:drawableStart="@drawable/ic_add_1"
+                    android:paddingStart="30dp"/>
+
+
+</FrameLayout>
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </androidx.cardview.widget.CardView>
 
-    <Button
-        android:id="@+id/fabAddGasto"
-        android:layout_width="wrap_content"
-        android:layout_height="48sp"
-        android:text="@string/add_gasto"
-        android:padding="16dp"
-        android:drawablePadding="10dp"
-        android:paddingEnd="20dp"
-        android:textColor="@color/white"
-        android:drawableStart="@drawable/ic_add_1"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
-        app:iconGravity="textStart"
-        app:iconPadding="9dp"
-        android:elevation="8dp"
-        android:background="@drawable/circle_shape"/>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/white" />
 
 </LinearLayout>
+

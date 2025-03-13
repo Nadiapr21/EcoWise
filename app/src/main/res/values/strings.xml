@@ -9,7 +9,8 @@
     <string name="boton_facebook"> Iniciar sesión con facebook </string>
     <string name="huella_dactilar"> Autenticación biométrica </string>
     <string name="vision_general"> Visión general </string>
-    <string name="add_gasto"> Nuevo gasto</string>
+    <string name="add_gasto"> Nuevo gasto </string>
+    <string name="add_ingreso"> Nuevo ingreso </string>
     <string name="web_client_id"> 909588111421-nu4mr635p846fnn5fi5graaef2o9l7eg.apps.googleusercontent.com </string>
     <string name="asset_statements"> </string>
     <string name="boton_volver"> Volver </string>
