@@ -102,7 +102,7 @@ public class RegistrarIngreso extends AppCompatActivity {
 
                     // Convertir el importe a tipo double
                     double importe = Double.parseDouble(importeIngresado);
-                    // Crear un Intent para devolver el gasto registrado
+                    // Crear un Intent para devolver el ingreso registrado
                     Intent intent = new Intent();
                     intent.putExtra("importe", importe);
                     intent.putExtra("categoria", categoriaIngresada);
@@ -110,7 +110,7 @@ public class RegistrarIngreso extends AppCompatActivity {
 
                     // Establecer el resultado y finalizar la actividad
                     setResult(RESULT_OK, intent);
-                    agregarGasto(importe, categoriaIngresada, fechaSeleccionada);
+                    agregarIngreso(importe, categoriaIngresada, fechaSeleccionada);
                     limpiarCampos();
 
                 } catch (NumberFormatException e) {
@@ -135,13 +135,13 @@ public class RegistrarIngreso extends AppCompatActivity {
     private void cargarDatosFirestore() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collection("gastos")
+        db.collection("ingresos")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @SuppressLint("NotifyDataSetChanged")
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                         if (error != null) {
-                            Toast.makeText(RegistrarIngreso.this, "Error al cargar los gastos", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegistrarIngreso.this, "Error al cargar los ingresos", Toast.LENGTH_SHORT).show();
                             return;
                         }
 
@@ -172,28 +172,28 @@ public class RegistrarIngreso extends AppCompatActivity {
         listaIngresos = new ArrayList<>();
     }
 
-    //Método para agregar un nuevo gasto
-    public void agregarGasto(double importe, String categoria, String fecha) {
+    //Método para agregar un nuevo ingreso
+    public void agregarIngreso(double importe, String categoria, String fecha) {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        HashMap<String, Object> gastos = new HashMap<>();
-        gastos.put("importe", importe);
-        gastos.put("categoria", categoria);
-        gastos.put("fecha", fecha);
+        HashMap<String, Object> ingresos = new HashMap<>();
+        ingresos.put("importe", importe);
+        ingresos.put("categoria", categoria);
+        ingresos.put("fecha", fecha);
 
-        db.collection("gastos")
-                .add(gastos)
+        db.collection("ingresos")
+                .add(ingresos)
                 .addOnSuccessListener(documentReference -> {
-                    System.out.println("Gasto añadido con ID: " + documentReference);
+                    System.out.println("Ingreso añadido con ID: " + documentReference);
                     listaIngresos.add(new Ingreso(importe, categoria, fecha));
                 })
                 .addOnFailureListener(e -> {
-                    System.out.println("Error al añadir el gasto: " + e.getMessage());
+                    System.out.println("Error al añadir el ingreso: " + e.getMessage());
                 });
     }
 
-    //Metodo para eliminar un gasto cogiendo la categoría
+    //Metodo para eliminar un ingreso cogiendo la categoría
     public void eliminarIngreso(String id) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -210,16 +210,16 @@ public class RegistrarIngreso extends AppCompatActivity {
 
         // Datos actualizados
         HashMap<String, Object> actualizacionIngreso = new HashMap<>();
-        actualizacionGasto.put("id", id);
-        actualizacionGasto.put("importe", nuevoImporte);
-        actualizacionGasto.put("categoria", nuevaCategoria);
-        actualizacionGasto.put("fecha", nuevaFecha);
+        actualizacionIngreso.put("id", id);
+        actualizacionIngreso.put("importe", nuevoImporte);
+        actualizacionIngreso.put("categoria", nuevaCategoria);
+        actualizacionIngreso.put("fecha", nuevaFecha);
 
         // Actualizar el documento
-        db.collection("gastos").document(id)
-                .update(actualizacionGasto)
-                .addOnSuccessListener(aVoid -> System.out.println("Gasto modificado correctamente"))
-                .addOnFailureListener(e -> System.out.println("Error al modificar el gasto: " + e.getMessage()));
+        db.collection("ingresos").document(id)
+                .update(actualizacionIngreso)
+                .addOnSuccessListener(aVoid -> System.out.println("Ingreso modificado correctamente"))
+                .addOnFailureListener(e -> System.out.println("Error al modificar el ingreso: " + e.getMessage()));
     }
 
 }

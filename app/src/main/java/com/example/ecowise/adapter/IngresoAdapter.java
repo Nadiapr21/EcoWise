@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ecowise.R;
 import com.example.ecowise.classes.Ingreso;
 import com.example.ecowise.ui.RegistrarIngreso;
-import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
 
 public class IngresoAdapter extends RecyclerView.Adapter<IngresoAdapter.IngresoViewHolder> {
@@ -29,7 +29,7 @@ public class IngresoAdapter extends RecyclerView.Adapter<IngresoAdapter.IngresoV
 
     @NonNull
     @Override
-    public IngresoAdapter onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public IngresoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ingreso, parent, false);
         return new IngresoViewHolder(itemView);
     }
