@@ -1,13 +1,15 @@
 package com.example.ecowise.ui;
 
 import static android.content.ContentValues.TAG;
-
+import androidx.appcompat.widget.Toolbar;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.PopupMenu;
@@ -21,8 +23,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecowise.R;
+import com.example.ecowise.adapter.IngresosGastosAdapter;
+import com.example.ecowise.classes.IngresosyGastos;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -46,8 +52,10 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.net.IDN;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,7 +64,14 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     private BarChart graficaBarras;
-    private Button fabAddGasto;
+    private Button fabAddGasto,fabAddIngreso;
+    private FloatingActionButton fabPrincipal;
+    private IngresosGastosAdapter adapter;
+    private boolean isOpen = false;
+    private RecyclerView rvIngresosGastos;
+    private ArrayList<IngresosyGastos> listaIngresosGastos;
+    private Toolbar optionsMenu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +86,37 @@ public class MainActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         graficaBarras = findViewById(R.id.graficaBarras);
 
+        //Inicializo fabAddIngreso
+        fabAddIngreso = findViewById(R.id.fabAddIngreso);
+        fabAddIngreso.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, RegistrarIngreso.class);
+            startActivity(intent);
+        });
+
+        //Inicializo fabPrincipal
+        fabPrincipal = findViewById(R.id.fabPrincipal);
+        fabPrincipal.setOnClickListener(v -> {
+            if (isOpen) {
+                animacionButton(fabAddGasto, false, -80f);
+                animacionButton(fabAddIngreso, false, -100f);
+            } else {
+                animacionButton(fabAddGasto, true, -20f);
+                animacionButton(fabAddIngreso, true, -10f);
+            }
+            isOpen = !isOpen;
+        });
+
+
+        //Inicializo rvIngresosGastos
+        rvIngresosGastos = findViewById(R.id.rvIngresosGastos);
+        rvIngresosGastos.setLayoutManager(new LinearLayoutManager(this));
+        listaIngresosGastos = new ArrayList<>();
+        adapter = new IngresosGastosAdapter(this, listaIngresosGastos);
+        rvIngresosGastos.setAdapter(adapter);
+
+        cargarDatosFirebase();
+
+
         configurarBarChart();
         getEntries();
 
@@ -81,14 +127,70 @@ public class MainActivity extends AppCompatActivity {
             finish();
         });
 
-
-
-
+        optionsMenu = findViewById(R.id.optionsMenu);
+        setSupportActionBar(optionsMenu);
 
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.top_nav_menu, menu);
+        return true;
+    }
 
+    private void cargarDatosFirebase() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        //cargar ingresos de firebase
+        db.collection("ingresos")
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        Toast.makeText(this, "Error al cargar los ingresos", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (value != null) {
+                        for (DocumentSnapshot document : value.getDocuments()) {
+                            double importe = document.getDouble("importe");
+                            String categoria = document.getString("categoria");
+                            String fecha = document.getString("fecha");
+                            listaIngresosGastos.add(new IngresosyGastos(importe, categoria, fecha, "ingreso"));
+                        }
+                    }
+
+                    //cargar gastos de firebase
+                    db.collection("ingresos")
+                            .addSnapshotListener((value2, error2) -> {
+                                if (error2 != null) {
+                                    Toast.makeText(MainActivity.this, "Error al cargar los gastos", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                if (value2 != null) {
+                                    for (DocumentSnapshot document : value2.getDocuments()) {
+                                        double importe = document.getDouble("importe");
+                                        String categoria = document.getString("categoria");
+                                        String fecha = document.getString("fecha");
+                                        listaIngresosGastos.add(new IngresosyGastos(importe, categoria, fecha, "gasto"));
+                                    }
+                                }
+                                adapter.notifyDataSetChanged();
+                            });
+                });
+    }
+
+    private void animacionButton(Button button, boolean mostrar, float transicionY) {
+        if (mostrar) {
+            button.setVisibility(View.VISIBLE);
+            ObjectAnimator animator = ObjectAnimator.ofFloat(button, "translationY", 0f, transicionY);
+            animator.setDuration(300);
+            animator.start();
+        } else {
+            ObjectAnimator animator = ObjectAnimator.ofFloat(button, "translationY", transicionY, 0f);
+            animator.setDuration(500);
+            animator.start();
+            button.postDelayed(() -> button.setVisibility(View.GONE), 50);
+        }
+    }
 
 
 //    private void cerrarMenu() {

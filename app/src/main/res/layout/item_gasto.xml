@@ -1,52 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="10dp"
-    android:backgroundTint="#A4D8F1"
     app:cardCornerRadius="16dp"
     android:elevation="10dp">
 
 <RelativeLayout
     android:layout_width="match_parent"
+    android:background="@drawable/cardview_shape"
     android:layout_height="wrap_content">
+
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginLeft="16dp"
-    android:layout_marginTop="16dp"
-    android:layout_marginBottom="16dp"
+    android:layout_margin="9dp"
+    android:gravity="center"
     android:padding="2dp">
+
     <TextView
-        android:id="@+id/tvImporte"
+        android:id="@+id/tvImporte2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_font"
+        android:fontFamily="@font/ptserif_regular"
         android:textSize="20sp"
         android:text="Importe"
         android:layout_marginTop="4dp"/>
     <TextView
-        android:id="@+id/tvCategoria"
+        android:id="@+id/tvCategoria2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:layout_marginTop="4dp"
-        android:fontFamily="@font/roboto_font"
+        android:fontFamily="@font/ptserif_regular"
         android:text="Categoria"/>
     <TextView
-        android:id="@+id/tvFecha"
+        android:id="@+id/tvFecha2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_font"
+        android:fontFamily="@font/ptserif_regular"
         android:layout_marginTop="4dp"
         android:text="Fecha"/>
 
 </LinearLayout>
 
     <ImageView
-        android:id="@+id/ivEliminar"
+        android:id="@+id/ivEliminar2"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:src="@drawable/ic_trash"

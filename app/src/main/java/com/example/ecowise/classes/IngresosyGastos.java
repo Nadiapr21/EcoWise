@@ -1,37 +1,16 @@
 package com.example.ecowise.classes;
 
-public class Ingreso {
-    private String id;
+public class IngresosyGastos {
     private double importe;
     private String categoria;
     private String fecha;
+    private String tipo;  //si es ingreso o gasto
 
-    public Ingreso() {
-
-    }
-
-    // Constructor con id, ya que cuando se trae de Firebase, se necesita un id
-    public Ingreso(String id, double importe, String categoria, String fecha) {
-        this.id = id;
+    public IngresosyGastos(double importe, String categoria, String fecha, String tipo) {
         this.importe = importe;
         this.categoria = categoria;
         this.fecha = fecha;
-    }
-    // Constructor sin id, para crear un nuevo ingreso
-    public Ingreso(double importe, String categoria, String fecha) {
-        this.importe = importe;
-        this.categoria = categoria;
-        this.fecha = fecha;
-    }
-
-
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+        this.tipo = tipo;
     }
 
     public double getImporte() {
@@ -56,5 +35,13 @@ public class Ingreso {
 
     public void setFecha(String fecha) {
         this.fecha = fecha;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 }

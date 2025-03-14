@@ -43,11 +43,11 @@ public class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.GastoViewHol
     @Override
     public void onBindViewHolder(@NonNull GastoViewHolder holder, int position) {
         Gasto gasto = listaGastos.get(position);
-        holder.tvCategoria.setText(gasto.getCategoria());
-        holder.tvImporte.setText(String.valueOf(gasto.getImporte()) + " €");
-        holder.tvFecha.setText(gasto.getFecha());
+        holder.tvCategoria2.setText(gasto.getCategoria());
+        holder.tvImporte2.setText(String.valueOf(gasto.getImporte()) + " €");
+        holder.tvFecha2.setText(gasto.getFecha());
 
-        holder.ivEliminar.setOnClickListener(v -> {
+        holder.ivEliminar2.setOnClickListener(v -> {
             if (gasto.getId() != null && !gasto.getId().isEmpty()) {
                 // Solo eliminar si el id no es nulo
                 listaGastos.remove(position);
@@ -87,16 +87,18 @@ public class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.GastoViewHol
     }
 
     public static class GastoViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvCategoria, tvImporte, tvFecha;
-        private ImageView ivEliminar;
+        TextView tvCategoria2;
+        TextView tvImporte2;
+        TextView tvFecha2;
+        private ImageView ivEliminar2;
 
         public GastoViewHolder(View itemView) {
             super(itemView);
             // Aquí hacemos el findViewById para las vistas del item
-            tvCategoria = itemView.findViewById(R.id.tvCategoria);
-            tvImporte = itemView.findViewById(R.id.tvImporte);
-            tvFecha = itemView.findViewById(R.id.tvFecha);
-            ivEliminar = itemView.findViewById(R.id.ivEliminar);
+            tvCategoria2 = itemView.findViewById(R.id.tvCategoria2);
+            tvImporte2 = itemView.findViewById(R.id.tvImporte2);
+            tvFecha2 = itemView.findViewById(R.id.tvFecha2);
+            ivEliminar2 = itemView.findViewById(R.id.ivEliminar2);
         }
     }
 }

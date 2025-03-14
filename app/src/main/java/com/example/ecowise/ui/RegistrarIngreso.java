@@ -61,7 +61,7 @@ public class RegistrarIngreso extends AppCompatActivity {
         recyclerViewIngresos = findViewById(R.id.recyclerViewIngresos);
         recyclerViewIngresos.setLayoutManager(new LinearLayoutManager(this));
         listaIngresos = new ArrayList<>();
-        ingresoAdapter = new IngresoAdapter(RegistrarIngreso.this, listaIngresos);
+        ingresoAdapter = new IngresoAdapter(this, listaIngresos);
         recyclerViewIngresos.setAdapter(ingresoAdapter);
 
         cargarDatosFirestore();

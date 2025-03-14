@@ -66,7 +66,9 @@ public class IngresoAdapter extends RecyclerView.Adapter<IngresoAdapter.IngresoV
     }
 
     public static class IngresoViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvImporte, tvCategoria, tvFecha;
+        TextView tvImporte;
+        TextView tvCategoria;
+        TextView tvFecha;
         private ImageView ivEliminar;
 
     public IngresoViewHolder(View itemView){
@@ -75,6 +77,7 @@ public class IngresoAdapter extends RecyclerView.Adapter<IngresoAdapter.IngresoV
         tvImporte = itemView.findViewById(R.id.tvImporte);
         tvCategoria = itemView.findViewById(R.id.tvCategoria);
         tvFecha = itemView.findViewById(R.id.tvFecha);
+        ivEliminar = itemView.findViewById(R.id.ivEliminar);
     }
 
     }
