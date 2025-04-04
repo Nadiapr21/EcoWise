@@ -2,9 +2,11 @@
 agp = "8.8.0"
 biometric = "1.4.0-alpha02"
 credentials = "1.5.0-rc01"
+dotlottieAndroid = "0.0.3"
 firebaseAuth = "23.2.0"
 firebaseBom = "33.10.0"
 firebaseBomVersion = "32.2.3"
+githubDotlottieAndroid = "0.5.0"
 googleServices = "4.4.2"
 kotlin = "2.0.0"
 coreKtx = "1.15.0"
@@ -21,12 +23,16 @@ constraintlayout = "2.2.0"
 materialVersion = "1.9.0"
 mpandroidchart = "v3.1.0"
 googleid = "1.1.1"
+firebaseStorage = "21.0.1"
+firebaseMessaging = "24.1.1"
 
 [libraries]
 androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
 com-google-firebase-firebase-auth = { module = "com.google.firebase:firebase-auth" }
+dotlottie-android = { module = "com.github.LottieFiles:dotlottie-android", version.ref = "dotlottieAndroid" }
+dotlottie-android-v050 = { module = "com.github.LottieFiles:dotlottie-android", version.ref = "githubDotlottieAndroid" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
@@ -53,6 +59,8 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 material-v190 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
 mpandroidchart = { module = "com.github.PhilJay:MPAndroidChart", version.ref = "mpandroidchart" }
 googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleid" }
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/settings_container"
+    android:layout_margin="16dp"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Configuración"
+        android:textSize="30sp"
+        android:textColor="@color/black"
+        android:layout_gravity="center"
+        android:fontFamily="@font/misans"
+        android:textStyle="bold"
+        android:paddingBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nombre de usuario"
+            android:textSize="16sp"/>
+
+        <EditText
+            android:id="@+id/etnombreUsuario"
+            android:layout_width="match_parent"
+            android:layout_height="48sp"
+            android:hint="Ingrese su nombre"/>
+
+        <CheckBox
+            android:id="@+id/checkNotificaciones"
+            android:layout_width="wrap_content"
+            android:layout_height="48sp"
+            android:text="Recibir notificaciones"
+            android:paddingTop="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Selecciona un tema"
+            android:textSize="16sp"
+            android:paddingTop="16dp"/>
+
+        <Spinner
+            android:id="@+id/spinnerTema"
+            android:layout_width="match_parent"
+            android:layout_height="48sp"/>
+
+        <Button
+            android:id="@+id/btnGuardar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Guardar preferencias"
+            android:textAllCaps="false"
+            android:padding="10dp"
+            android:backgroundTint="#83A9D1"
+            android:textColor="@color/white"
+            android:layout_marginHorizontal="25dp"
+            android:background="@drawable/rounded_guardar_button"
+            android:layout_marginTop="20dp"/>
+
+    </LinearLayout>
+</ScrollView>

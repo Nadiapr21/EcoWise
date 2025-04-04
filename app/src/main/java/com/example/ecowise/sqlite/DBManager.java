@@ -10,7 +10,7 @@ import android.util.Log;
 
 import java.sql.SQLException;
 
-public class DBManager {
+public class DBManager {  //Aqui manejo las operaciones que interactuan con la base de datos usando el objeto dbHelper
     private DBHelper dbHelper;
     private SQLiteDatabase db;
 
@@ -43,6 +43,12 @@ public class DBManager {
     }
 
     public Cursor fetchData() {  //Abre la base de datos solo para la lectura //Recuperar los datos
-        return db.rawQuery("SELECT * FROM users", null);
+        Cursor cursor = null;
+        try{
+            cursor = db.rawQuery("SELECT * FROM usuarios", null);
+        }catch (SQLiteException e){
+            Log.e("DB_ERROR", "Error recuperando los datos: " + e.getMessage());
+        }
+        return cursor;
     }
 }

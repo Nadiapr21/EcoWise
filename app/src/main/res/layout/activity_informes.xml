@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/main"
+    android:padding="16dp">
+
+
+
+    <!-- Barra de progreso para mostrar el estado de generación -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:visibility="gone"/>
+
+    <!-- Texto para mostrar el estado del informe -->
+    <TextView
+        android:id="@+id/tvEstadoInforme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Estado: Completado"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:layout_below="@id/progressBar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"/>
+
+    <!-- ScrollView para mostrar el contenido del informe -->
+    <ScrollView
+        android:id="@+id/svInforme"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_below="@id/tvEstadoInforme"
+        android:layout_marginTop="30dp">
+
+        <!-- Contenido del informe en un TextView -->
+        <TextView
+            android:id="@+id/tvContenidoInforme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="El informe se está generando..."
+            android:textSize="30sp"
+            android:textColor="@color/black"
+            android:padding="10dp"/>
+    </ScrollView>
+
+</RelativeLayout>

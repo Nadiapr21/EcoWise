@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <group>
+
     <item
         android:id="@+id/nav_inicio"
         android:icon="@drawable/ic_inicio"
@@ -20,4 +22,7 @@
         android:id="@+id/nav_metas"
         android:icon="@drawable/ic_meta"
         android:title="Metas"/>
+
+    </group>
+
 </menu>

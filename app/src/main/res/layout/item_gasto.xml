@@ -9,14 +9,14 @@
 
 <RelativeLayout
     android:layout_width="match_parent"
-    android:background="@drawable/cardview_shape"
-    android:layout_height="wrap_content">
+    android:backgroundTint="@color/white"
+    android:layout_height="wrap_content"
+    android:layout_margin="12dp">
 
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_margin="9dp"
     android:gravity="center"
     android:padding="2dp">
 
@@ -24,7 +24,7 @@
         android:id="@+id/tvImporte2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/ptserif_regular"
+        android:fontFamily="@font/misans"
         android:textSize="20sp"
         android:text="Importe"
         android:layout_marginTop="4dp"/>
@@ -34,13 +34,14 @@
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:layout_marginTop="4dp"
-        android:fontFamily="@font/ptserif_regular"
+        android:fontFamily="@font/misans"
         android:text="Categoria"/>
     <TextView
         android:id="@+id/tvFecha2"
+        android:layout_gravity="left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/ptserif_regular"
+        android:fontFamily="@font/misans"
         android:layout_marginTop="4dp"
         android:text="Fecha"/>
 

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/linear_layout"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+    android:background="@drawable/bsdialog_bg"
+    android:layout_height="290dp">
+
+    <ImageView
+        android:id="@+id/bsdBarra"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/barra_bsd"
+        android:scaleType="centerCrop"
+        android:layout_gravity="center|top"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="viewStart"
+            android:text="Perfil"
+            android:textSize="25sp"
+            android:padding="8dp"
+            android:textColor="@color/material_dynamic_neutral0"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="5dp"/>
+
+        <ImageView
+            android:id="@+id/btnCerrar"
+            android:layout_width="52dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="230dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_cerrar" />
+    </LinearLayout>
+<LinearLayout
+    android:id="@+id/editarPerfilLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="10dp"
+    android:layout_marginTop="10dp">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:src="@drawable/ic_editar"/>
+
+    <TextView
+        android:id="@+id/tvEditarPerfil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginLeft="20dp"
+        android:padding="2dp"
+        android:text="Editar perfil"
+        android:textColor="#6B6B6B"
+        android:textSize="17sp" />
+
+
+
+
+
+
+</LinearLayout>
+
+</LinearLayout>

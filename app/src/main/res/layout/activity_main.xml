@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#B4D6E1"
+    android:orientation="vertical"
     tools:context=".ui.MainActivity">
 
     <!-- Contenedor principal con ScrollView -->
@@ -14,13 +15,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- ScrollView -->
         <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
 
             <LinearLayout
+                android:id="@+id/contenido"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -33,18 +35,12 @@
                     app:title="" />
 
                 <!-- Primer CardView -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="30dp"
-                    android:backgroundTint="@color/black"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="8dp">
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
+                        android:layout_margin="25dp"
                         android:background="@color/black"
                         android:orientation="vertical"
                         android:padding="16dp">
@@ -64,16 +60,16 @@
                             android:layout_height="300dp"
                             android:layout_gravity="center"
                             android:layout_margin="15dp"
-                            android:backgroundTint="@color/black" />
+                            android:backgroundTint="@color/backgroundColor" />
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+
 
                 <!-- Segundo CardView -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:backgroundTint="#E1000000"
+                    android:background="@null"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="8dp">
 
@@ -83,8 +79,9 @@
 
                         <!-- RecyclerView -->
                         <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/rvIngresosGastos"
+                            android:id="@+id/rvGastos"
                             android:layout_width="match_parent"
+                            android:background="@null"
                             android:layout_height="300dp"
                             android:layout_margin="15dp"
                             android:scrollbars="vertical" />
@@ -94,17 +91,13 @@
             </LinearLayout>
         </ScrollView>
 
-        <!-- BottomNavigationView -->
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNavigationView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@drawable/bottom_nav_background"
-            app:itemIconTint="@color/backgroundColor"
-            app:itemTextColor="@color/backgroundColor"
-            app:menu="@menu/bottom_nav_menu" />
+
+
+
     </LinearLayout>
+
+
+
 
     <Button
         android:id="@+id/fabAddGasto"
@@ -122,22 +115,6 @@
         android:textColor="@color/black"
         android:visibility="gone" />
 
-    <Button
-        android:id="@+id/fabAddIngreso"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_marginBottom="230dp"
-        android:background="@drawable/circle_shape"
-        android:layout_marginRight="18dp"
-        android:drawableStart="@drawable/ic_add_1"
-        android:elevation="9dp"
-        android:paddingStart="10dp"
-        android:paddingEnd="16dp"
-        android:text="@string/add_ingreso"
-        android:textColor="@color/white"
-        android:visibility="gone" />
-
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabPrincipal"
@@ -149,4 +126,22 @@
         android:background="@drawable/circle_shape3"
         android:contentDescription="Botón para agregar transacción"
         app:srcCompat="@drawable/ic_add_1" />
+
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_gravity="bottom"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        app:elevation="10dp"
+        app:itemHorizontalTranslationEnabled="false"
+        android:background="@drawable/bottom_nav_background"
+        app:itemIconTint="@color/backgroundColor"
+        app:itemTextColor="@color/backgroundColor"
+        app:menu="@menu/bottom_nav_menu" />
+
+
 </FrameLayout>

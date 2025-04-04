@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="12dp">
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="18dp"
+
+        android:paddingBottom="8dp">
+    
+        <TextView
+            android:id="@+id/tvTituloNota"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Titulo"
+            android:textColor="@color/black"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/misans"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
+
+       <TextView
+           android:id="@+id/tvContenidoNota"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:text="Contenido de la nota"
+           android:textSize="12sp"
+           android:layout_marginBottom="10dp"
+           android:textColor="@color/black"
+           android:fontFamily="@font/misans"
+           android:maxLines="3"
+           android:ellipsize="end"/>
+
+        <TextView
+            android:id="@+id/tvFechaNota"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fecha de creación"
+            android:fontFamily="@font/misans"
+            android:layout_marginTop="15dp"
+            android:textSize="12sp"
+            android:textColor="#898989"/>
+    
+    
+    </LinearLayout>
+                
+
+</androidx.cardview.widget.CardView>

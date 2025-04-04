@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.biometric.BiometricPrompt;
 import androidx.biometric.BiometricManager;
 
@@ -52,6 +53,8 @@ import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 import com.google.android.gms.auth.api.identity.SignInClient;
 import com.google.android.gms.auth.api.identity.SignInCredential;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import android.util.Log;
 import android.util.Patterns;
@@ -59,8 +62,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.concurrent.Executor;
 
 public class LoginActivity extends AppCompatActivity {
@@ -74,11 +80,13 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etPassword;
     private boolean isPasswordVisible = false; //Estado de la contraseña
     private ImageView ivHuellaDactilar;
+    FirebaseUser user;
     private Button btnGoogleLogin;
     private CredentialManager credentialManager;
     private GetPasswordOption getPasswordOption;
     private GetPublicKeyCredentialOption getPublicKeyCredentialOption;
     GetGoogleIdOption getGoogleIdOption;
+    private TextView tvForgotPassword;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -94,6 +102,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
 
 
 
@@ -101,12 +110,13 @@ public class LoginActivity extends AppCompatActivity {
         btnRegistro = findViewById(R.id.btnRegistro);
         etEmail = findViewById(R.id.etEmail);
         ivHuellaDactilar = findViewById(R.id.ivHuellaDactilar);
+        tvForgotPassword = findViewById(R.id.tvForgotPassword);
         setupBiometricAuthentication();
-
         etPassword = findViewById(R.id.etPassword);
 
-        //btnGoogleLogin.setOnClickListener(view ->);
-
+        tvForgotPassword.setOnClickListener(v-> {
+            mostrarDialogoRestablecerPassword();
+        });
 
 
         etPassword.setOnTouchListener(new View.OnTouchListener() {
@@ -152,15 +162,26 @@ public class LoginActivity extends AppCompatActivity {
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                // Inicio de sesión exitoso
-                                Log.d("TAG", "signInWithEmail:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
-                                goToMainActivity(user); // Metodo que navega a la actividad principal
+                                Log.d("TAG", "signInWithEmail:success");
+
+                                if (user != null) {
+                                    String userId = user.getUid();
+                                    Log.d("FirebaseUser", "El userId del usuario actual es: " + userId);
+                                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+                                    recuperarDatos("recordatorios", userId, db);
+                                    recuperarDatos("presupuestos", userId, db);
+                                    recuperarDatos("notas", userId, db);
+                                    recuperarDatos("metas", userId, db);
+                                    recuperarDatos("gastos", userId, db);
+                                }
+                                startActivity(new Intent(this, MainActivity.class)); // Metodo que navega a la actividad principal
                             } else {
                                 // Error en el inicio de sesión
                                 Log.w("TAG", "signInWithEmail:failure", task.getException());
                                 Exception exception = task.getException();
-                                mostrarMensajeError(exception); // Muestra un mensaje de error al usuario
+                                mostrarMensajeError(exception);
                             }
                         });
             }
@@ -177,6 +198,53 @@ public class LoginActivity extends AppCompatActivity {
         ivHuellaDactilar.setOnClickListener(v -> biometricPrompt.authenticate(promptInfo));
 
     }
+
+    private void mostrarDialogoRestablecerPassword() {
+
+        final EditText correoEditText = new EditText(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Restablecer Contraseña")
+                .setMessage("Ingresa tu correo electrónico para recibir un enlace de restablecimiento.")
+                .setView(correoEditText)
+                .setPositiveButton("Enviar", (dialog, which) -> {
+                    String correo = correoEditText.getText().toString().trim();
+                    if (!correo.isEmpty()) {
+                        enviarCorreoRestablecimiento(correo);
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Por favor ingresa un correo válido.", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+    private void enviarCorreoRestablecimiento(String correo) {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth.sendPasswordResetEmail(correo)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        Toast.makeText(this, "Te hemos enviado un correo para restablecer la contraseña", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(this, "Error al enviar el correo. Inténtalo de nuevo", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void recuperarDatos(String coleccion, String userId, FirebaseFirestore db) {
+        db.collection(coleccion)
+                .whereEqualTo("usuario_id", userId)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    Log.d("Firestore", "Datos de la colección " + coleccion + " recuperados correctamente.");
+                            for (DocumentSnapshot document : queryDocumentSnapshots) {
+                                Log.d("Firestore", coleccion + ": " + document.getData());
+                            }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error al recuperar datos de la colección " + coleccion, e);
+                });
+    }
+
     //Metodo para iniciar sesión con la huella dactilar
     private void setupBiometricAuthentication() {
         //Verificar si el dispositivo soporta biometría
@@ -234,13 +302,6 @@ public class LoginActivity extends AppCompatActivity {
         Toast.makeText(this, mensajeError, Toast.LENGTH_SHORT).show();
 
     }
-
-    private void goToMainActivity(FirebaseUser user) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("user", user); //Pasa el usuario a MainActivity
-        startActivity(intent);
-        finish(); //Cierra la actividad de inicio de sesión
-    };
 
     //Metodo para iniciar sesión
     public void loginUser(String email, String password) {

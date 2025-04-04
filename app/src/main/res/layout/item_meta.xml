@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="15dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="6dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tvTituloMeta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Título de la meta"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"/>
+
+        <ImageView
+            android:id="@+id/ivEliminar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_trash"
+            android:layout_gravity="right"/>
+
+
+        <ProgressBar
+            android:id="@+id/progresoMeta"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:progress="0"
+            android:max="100"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/tvImporteObjetivo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Importe Objetivo: 0"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/tvImporteAhorradoMeta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Importe Ahorrado: 0"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tvFechaLimiteMeta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fecha Límite: "
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tvEstadoMeta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Estado: "
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:layout_marginTop="4dp"/>
+
+        <Button
+            android:id="@+id/btnAgregarAhorrado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:layout_marginTop="8dp"
+            android:text="Agregar ahorro"
+            android:textSize="14sp"
+            android:layout_gravity="end"
+            android:background="@drawable/rounded_guardar_button"
+            android:textColor="@android:color/black"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

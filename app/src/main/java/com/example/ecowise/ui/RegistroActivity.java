@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -22,6 +23,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.ecowise.SecurePreferences;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -41,9 +43,16 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
 public class RegistroActivity extends AppCompatActivity {
 
-    private EditText etEmail, etPassword, etConfirmPassword;
+    private EditText etNombre, etEmail, etPassword, etConfirmPassword;
     private Button btnConfirmar;
     private TextView tvTituloRegistro, tvSubtituloRegistro;
     private boolean isPasswordVisible = false;
@@ -54,6 +63,7 @@ public class RegistroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_registro);
+        etNombre = findViewById(R.id.etNombre);
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         btnConfirmar = findViewById(R.id.btnConfirmar);
@@ -70,23 +80,24 @@ public class RegistroActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         ObjectAnimator animacion1 = ObjectAnimator.ofFloat(tvTituloRegistro, "alpha", 0f, 1f); //Creo un ObjectAnimator para la animación y lo asigno
-        animacion1.setDuration(3000); //La duración en milisegundos
+        animacion1.setDuration(3000);
         animacion1.setInterpolator(new AccelerateDecelerateInterpolator()); //Efecto de aceleración y desaceleración
-        animacion1.start(); //Inicia la animación
+        animacion1.start();
 
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                // Aquí va la segunda animación
+
                 ObjectAnimator animacion2 = ObjectAnimator.ofFloat(tvSubtituloRegistro, "alpha", 0f, 1f);
                 animacion2.setDuration(3000);
                 animacion2.setInterpolator(new AccelerateDecelerateInterpolator());
                 animacion2.start();
             }
-        }, 3000);  // Retraso de 3000 ms (3 segundos)
+        }, 3000);
 
 
         btnConfirmar.setOnClickListener(v -> {
+            String nombre = etNombre.getText().toString().trim();
             String email = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
             String confirmPassword = etConfirmPassword.getText().toString().trim();
@@ -104,11 +115,12 @@ public class RegistroActivity extends AppCompatActivity {
             }
 
             Intent intent = new Intent(RegistroActivity.this, MainActivity.class);
+            intent.putExtra("nombre", nombre);
             intent.putExtra("email", email);
             intent.putExtra("password", password);
             startActivity(intent);
 
-            crearUser(email, password);
+            crearUser(nombre, email, password);
         });
 
         etPassword.setOnTouchListener(new View.OnTouchListener() {
@@ -139,8 +151,8 @@ public class RegistroActivity extends AppCompatActivity {
             }
 
             public boolean performClick() {
-                etPassword.performClick(); // Realiza la acción de click en el EditText
-                return true; //Devuelve true
+                etPassword.performClick();
+                return true;
             }
         });
 
@@ -172,15 +184,42 @@ public class RegistroActivity extends AppCompatActivity {
             }
 
             public boolean performClick() {
-                etConfirmPassword.performClick(); // Realiza la acción de click en el EditText
-                return true; //Devuelve true
+                etConfirmPassword.performClick();
+                return true;
             }
 
         });
 
     }
 
-    public void crearUser(String email, String password) {
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(RegistroActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private boolean validarNombre(String nombre) {
+        if (nombre.isEmpty()) {
+            etNombre.setError("El nombre no puede estar vacío.");
+            etNombre.requestFocus();
+            return false;
+        }
+        if (!nombre.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) {
+            etNombre.setError("El nombre solo puede contener letras y espacios.");
+            etNombre.requestFocus();
+            return false;
+        }
+        if (nombre.length() < 3) {
+            etNombre.setError("El nombre debe tener al menos 3 caracteres.");
+            etNombre.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
+    public void crearUser(String nombre, String email, String password) {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -191,18 +230,31 @@ public class RegistroActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             String userId = auth.getCurrentUser().getUid();
 
-                            java.util.HashMap<String, Object> userDoc = new java.util.HashMap<>();
-                            userDoc.put("email", email);
-                            userDoc.put("password", password);
-                            userDoc.put("fechaCreacion", System.currentTimeMillis());
 
-                            db.collection("usuarios").document(userId)
-                                    .set(userDoc)
+
+                            Map<String, Object> datosIniciales = new HashMap<>();
+                            datosIniciales.put("nombre", nombre);
+                            datosIniciales.put("gastos", new ArrayList<>());
+                            datosIniciales.put("userId", userId);
+                            datosIniciales.put("email", email);
+
+                            SimpleDateFormat sdf = null;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                sdf = new SimpleDateFormat("dd-MM-yy", Locale.getDefault());
+                            }
+                            String fechaCreacion = sdf.format(new Date());
+                            datosIniciales.put("fechaCreacion", fechaCreacion);
+
+                            db.collection("usuarios")
+                                    .document(userId)
+                                    .set(datosIniciales)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void unused) {
                                             Log.d("Firestore", "Usuario añadido a Firestore con éxito");
                                             Toast.makeText(RegistroActivity.this, "Usuario creado con éxito", Toast.LENGTH_SHORT).show();
+                                            startActivity(new Intent(RegistroActivity.this, MainActivity.class));
+                                            saveUserDataToSecurePrefs(userId, email);
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
@@ -233,7 +285,14 @@ public class RegistroActivity extends AppCompatActivity {
                     }
 
                     ;
+                    private void saveUserDataToSecurePrefs(String userId, String email) {
+                        SecurePreferences securePreferences = new SecurePreferences(RegistroActivity.this);
+                        securePreferences.saveData("userId", userId);
+                        securePreferences.saveData("email", email);
+                    }
                 });
+
+
     }
 
 }

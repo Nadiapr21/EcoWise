@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/main"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/etTituloMeta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Título de la meta"
+        android:inputType="text"
+        android:layout_marginBottom="14dp"/>
+
+    <EditText
+        android:id="@+id/etDescripcionMeta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Importe objetivo"
+        android:inputType="numberDecimal"
+        android:layout_marginBottom="14dp"/>
+
+    <EditText
+        android:id="@+id/etImporteObjetivo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Importe ahorrado"
+        android:inputType="numberDecimal"
+        android:layout_marginBottom="14dp"/>
+
+    <EditText
+        android:id="@+id/etFechaLimiteMeta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Fecha Límite"
+        android:inputType="date"
+        android:layout_marginBottom="14dp"/>
+
+    <EditText
+        android:id="@+id/etEstado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="14dp"
+        android:hint="Estado (progreso)" />
+
+    <Button
+        android:id="@+id/btnGuardarMeta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Guardar Meta"/>
+
+</LinearLayout>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".ui.AyudaActivity">
+
+    <TextView
+        android:id="@+id/tvTituloAyuda"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ayuda"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="60dp"
+        android:textSize="30sp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/misans"
+        android:textStyle="bold"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@+id/tvTituloAyuda"
+        android:layout_marginTop="16dp"
+        android:layout_alignParentBottom="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="14dp">
+
+    <TextView
+        android:id="@+id/tvIntroduccion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/misans"
+        android:text="Bienvenido al Centro de Ayuda de EcoWise. Aquí encontrarás toda la información que necesitas para utilizar la aplicación."
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="20dp"/>
+
+        <TextView
+            android:id="@+id/tituloInstrucciones"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Instrucciones: "
+            android:layout_marginTop="16dp"
+            android:textSize="25sp"
+            android:fontFamily="@font/misans"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:lineSpacingExtra="4dp"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:id="@+id/tvInstrucciones"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:fontFamily="@font/misans"
+            android:textStyle="bold"
+            android:text="\n\n1. Inicia sesión con tu cuenta.\n2. Completa tu perfil.\n3. Comienza a registrar tus actividades financieras."/>
+
+        <TextView
+            android:id="@+id/tituloFAQ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="Preguntas Frecuentes: "
+            android:textStyle="bold"
+            android:fontFamily="@font/misans"
+            android:textSize="20sp"
+            android:textColor="@android:color/black"
+            android:lineSpacingExtra="4dp"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:id="@+id/tvFAQ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="\n\n- ¿Cómo cambio mi foto de perfil?\n- ¿Cómo restablezco mi contraseña?"
+            android:textSize="16sp"
+            android:textAlignment="center"
+            android:paddingBottom="20dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/misans"
+            android:layout_gravity="center"
+            android:lineSpacingExtra="4dp"
+            android:layout_marginBottom="15dp" />
+
+    </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btnCerrarAyuda"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:backgroundTint="@color/black"
+        android:background="@drawable/ic_cerrar"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"/>
+</RelativeLayout>

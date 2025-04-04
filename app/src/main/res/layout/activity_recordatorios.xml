@@ -1,10 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.RecordatoriosActivity">
+    tools:context=".activities.RecordatoriosActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Título de la pantalla -->
+    <TextView
+        android:id="@+id/tvTituloRecordatorio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mis Recordatorios"
+        android:textSize="22sp"
+        android:fontFamily="@font/misans"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+    android:paddingBottom="10dp"/>
+
+    <!-- RecyclerView para mostrar los recordatorios -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRecordatorios"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tvTituloRecordatorio"
+    android:layout_above="@id/fabAgregar"
+    android:layout_marginTop="10dp" />
+
+    <!-- FloatingActionButton para agregar nuevos recordatorios -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAgregar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="boton agregar recordatorio"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        app:srcCompat="@drawable/ic_add_1" />
+</RelativeLayout>

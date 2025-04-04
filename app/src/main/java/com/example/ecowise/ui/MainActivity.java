@@ -1,134 +1,382 @@
 package com.example.ecowise.ui;
 
 import static android.content.ContentValues.TAG;
-import androidx.appcompat.widget.Toolbar;
+
+import android.Manifest;
 import android.animation.ObjectAnimator;
-import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.PopupMenu;
-import android.widget.TextView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.FragmentContainerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecowise.R;
-import com.example.ecowise.adapter.IngresosGastosAdapter;
-import com.example.ecowise.classes.IngresosyGastos;
+import com.example.ecowise.activities.InformesActivity;
+import com.example.ecowise.activities.NotasActivity;
+import com.example.ecowise.adapter.GastoAdapter;
+import com.example.ecowise.classes.Gasto;
+import com.example.ecowise.activities.AnalisisActivity;
+import com.example.ecowise.activities.MetasActivity;
+import com.example.ecowise.activities.PresupuestoActivity;
+import com.example.ecowise.activities.RecordatoriosActivity;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.net.IDN;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
     private BarChart graficaBarras;
-    private Button fabAddGasto,fabAddIngreso;
+    private Button fabAddGasto;
     private FloatingActionButton fabPrincipal;
-    private IngresosGastosAdapter adapter;
+    private GastoAdapter adapter;
     private boolean isOpen = false;
-    private RecyclerView rvIngresosGastos;
-    private ArrayList<IngresosyGastos> listaIngresosGastos;
+    private RecyclerView rvGastos;
+    private ArrayList<Gasto> listaGastos;
+    private FirebaseFirestore db;
     private Toolbar optionsMenu;
+    private BottomNavigationView bottomNavigationView;
+    private boolean doubleBackToExitPressedOnce = false;
+    private ImageView ivVolver;
+    private FragmentContainerView fragmentContainerView;
+    private ScrollView scrollView;
+    private LinearLayout contenido;
+    private FirebaseMessaging firebaseMessaging;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        aplicarTemaGuardado();
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+        EdgeToEdge.enable(this);
         FirebaseApp.initializeApp(this);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+
+
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+                    @Override
+                    public void handleOnBackPressed() {
+                        if (doubleBackToExitPressedOnce) {
+                            finish();
+                            return;
+                        }
+                        doubleBackToExitPressedOnce = true;
+                        Toast.makeText(MainActivity.this, "Pulse de nuevo para salir", Toast.LENGTH_SHORT).show();
+                        new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
+                    }
+
+                });
+
+
+
+        //Inicializo bottomNavigationView
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+
+        //Le seteo un OnItemSelectedListener para navegar entre distintas actividades
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+
+                if (id == R.id.nav_inicio) {
+                    return true;
+                } else if (id == R.id.nav_graficos) {
+                    startActivity(new Intent(MainActivity.this, AnalisisActivity.class));
+                    return true;
+                } else if (id == R.id.nav_recordatorios) {
+                    startActivity(new Intent(MainActivity.this, RecordatoriosActivity.class));
+                    return true;
+                } else if (id == R.id.nav_metas) {
+                    startActivity(new Intent(MainActivity.this, MetasActivity.class));
+                    return true;
+                }
+                return false;
+            }
+        });
+
+
         graficaBarras = findViewById(R.id.graficaBarras);
 
-        //Inicializo fabAddIngreso
-        fabAddIngreso = findViewById(R.id.fabAddIngreso);
-        fabAddIngreso.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, RegistrarIngreso.class);
-            startActivity(intent);
-        });
+        db = FirebaseFirestore.getInstance();
+
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+
+            scrollView = findViewById(R.id.scrollView);
+            contenido = findViewById(R.id.contenido);
+            scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    if (scrollY > oldScrollY) {
+                        bottomNavigationView.animate()
+                                .translationY(bottomNavigationView.getHeight())
+                                .alpha(0f)
+                                .setDuration(300)
+                                .start();
+                    }else if (scrollY < oldScrollY){
+                        bottomNavigationView.animate()
+                                .translationY(0)
+                                .alpha(1f)
+                                .setDuration(300)
+                                .start();
+                    }
+
+
+                }
+            });
+
+        }
+
+
 
         //Inicializo fabPrincipal
         fabPrincipal = findViewById(R.id.fabPrincipal);
+
+        //onClickListener para la animacion
         fabPrincipal.setOnClickListener(v -> {
             if (isOpen) {
                 animacionButton(fabAddGasto, false, -80f);
-                animacionButton(fabAddIngreso, false, -100f);
             } else {
                 animacionButton(fabAddGasto, true, -20f);
-                animacionButton(fabAddIngreso, true, -10f);
             }
             isOpen = !isOpen;
         });
 
 
-        //Inicializo rvIngresosGastos
-        rvIngresosGastos = findViewById(R.id.rvIngresosGastos);
-        rvIngresosGastos.setLayoutManager(new LinearLayoutManager(this));
-        listaIngresosGastos = new ArrayList<>();
-        adapter = new IngresosGastosAdapter(this, listaIngresosGastos);
-        rvIngresosGastos.setAdapter(adapter);
+        //Inicializo rvGastos
+        rvGastos = findViewById(R.id.rvGastos);
+        rvGastos.setLayoutManager(new LinearLayoutManager(this));
+        listaGastos = new ArrayList<>(); //ArrayList para la lista de gastos
+        adapter = new GastoAdapter(MainActivity.this, listaGastos); //Creo un objeto GastoAdapter para los gastos
+        rvGastos.setAdapter(adapter); //Al recyclerview le seteo el adapter
 
         cargarDatosFirebase();
-
-
+        cargarDatosGrafica();
         configurarBarChart();
-        getEntries();
 
         fabAddGasto = findViewById(R.id.fabAddGasto);
         fabAddGasto.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, RegistrarGasto.class);
             startActivity(intent);
-            finish();
+
         });
 
         optionsMenu = findViewById(R.id.optionsMenu);
         setSupportActionBar(optionsMenu);
+
+    }
+
+
+
+
+
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    // FCM SDK (and your app) can post notifications.
+                } else {
+                    // TODO: Inform user that that your app will not show notifications.
+                }
+            });
+
+    private void askNotificationPermission() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+                    PackageManager.PERMISSION_GRANTED) {
+
+            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+
+            } else {
+
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+            }
+        }
+    }
+
+
+
+    private void aplicarTemaGuardado() {
+        SharedPreferences preferences = getSharedPreferences("AppPreferences", MODE_PRIVATE);
+        int themePosition = preferences.getInt("theme", 0);
+
+        switch (themePosition) {
+            case 0:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
+            case 1:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                break;
+            case 2:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                break;
+        }
+    }
+
+    private void cargarDatosGrafica() {
+        db.collection("gastos")
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (queryDocumentSnapshots != null) {
+                            List<BarEntry> entries = new ArrayList<>();
+
+                            int index = 0;
+                            for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                                double importe = document.getDouble("importe");
+                                entries.add(new BarEntry(index, (float) importe));
+                                index++;
+                            }
+                            actualizarGrafica(entries);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("Firebase", "Error al obtener datos", e);
+                    }
+                });
+    };
+
+    private void actualizarGrafica(List<BarEntry> entries) {
+
+        BarDataSet barDataSet = new BarDataSet(entries, "Gastos");
+        barDataSet.setColor(Color.rgb(91, 134, 184));
+        BarData barData = new BarData(barDataSet);
+        graficaBarras.setData(barData);
+        graficaBarras.invalidate();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.nav_perfil) {
+            abrirPerfil();
+            return true;
+        } else if (id == R.id.nav_ajustes) {
+            abrirAjustes();
+            return true;
+        } else if (id == R.id.nav_cerrarSesion) {
+            logOut();
+            return true;
+        } else if (id == R.id.nav_ayuda) {
+            abrirAyuda();
+            return true;
+        }else if (id == R.id.nav_notas){
+            abrirNotas();
+            return true;
+        } else if (id == R.id.nav_presupuesto) {
+            abrirPresupuesto();
+            return true;
+        }else if (id == R.id.nav_informes){
+            abrirInforme();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void abrirInforme() {
+        startActivity(new Intent(this, InformesActivity.class));
+    }
+
+
+    private void abrirPresupuesto() {
+        startActivity(new Intent(this, PresupuestoActivity.class));
+    }
+
+    private void abrirNotas() {
+        startActivity( new Intent(MainActivity.this, NotasActivity.class));
+    }
+
+    private void abrirAyuda() {
+        startActivity(new Intent(this, AyudaActivity.class));
+    }
+
+    private void abrirAjustes() {
+        startActivity(new Intent(this, AjustesActivity.class));
+    }
+
+    private void abrirPerfil() {
+        startActivity(new Intent(this, PerfilActivity.class));
+    }
+
+    private void logOut() {
+        new AlertDialog.Builder(this)
+                .setTitle("Cierre de sesión")
+                .setMessage("¿Estás seguro de que quieres cerrar sesión?")
+                .setPositiveButton("Sí", (dialog, which) -> {
+                    FirebaseAuth.getInstance().signOut();
+
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    //Esto es para limpiar la pila de tasks / actividades anteriores
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                })
+                .setNegativeButton("No", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .show();
 
 
     }
@@ -142,40 +390,26 @@ public class MainActivity extends AppCompatActivity {
     private void cargarDatosFirebase() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        //cargar ingresos de firebase
-        db.collection("ingresos")
-                .addSnapshotListener((value, error) -> {
-                    if (error != null) {
-                        Toast.makeText(this, "Error al cargar los ingresos", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    if (value != null) {
-                        for (DocumentSnapshot document : value.getDocuments()) {
-                            double importe = document.getDouble("importe");
-                            String categoria = document.getString("categoria");
-                            String fecha = document.getString("fecha");
-                            listaIngresosGastos.add(new IngresosyGastos(importe, categoria, fecha, "ingreso"));
-                        }
-                    }
-
                     //cargar gastos de firebase
-                    db.collection("ingresos")
-                            .addSnapshotListener((value2, error2) -> {
-                                if (error2 != null) {
+                    db.collection("gastos")
+                            .addSnapshotListener((value, error) -> {
+                                if (error != null) {
                                     Toast.makeText(MainActivity.this, "Error al cargar los gastos", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
-                                if (value2 != null) {
-                                    for (DocumentSnapshot document : value2.getDocuments()) {
+                                if (value != null) {
+                                    listaGastos.clear();
+                                    for (DocumentSnapshot document : value.getDocuments()) {
+                                        String id = document.getId();
                                         double importe = document.getDouble("importe");
                                         String categoria = document.getString("categoria");
                                         String fecha = document.getString("fecha");
-                                        listaIngresosGastos.add(new IngresosyGastos(importe, categoria, fecha, "gasto"));
+                                        listaGastos.add(new Gasto(id, importe, categoria, fecha));
                                     }
+
                                 }
                                 adapter.notifyDataSetChanged();
                             });
-                });
     }
 
     private void animacionButton(Button button, boolean mostrar, float transicionY) {
@@ -193,83 +427,43 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-//    private void cerrarMenu() {
-//        fabRegistrarGasto.animate().translationY(0f).alpha(0f).setDuration(300).withEndAction(() ->
-//                fabRegistrarGasto.setVisibility(View.GONE)).start();
-//
-//        fabAddMeta.animate().translationY(0f).alpha(0f).setDuration(300).withEndAction(() ->
-//                fabAddMeta.setVisibility(View.GONE)).start();
-//
-//        fabNotasPersonales.animate().translationY(0f).alpha(0f).setDuration(300).withEndAction(() ->
-//                fabNotasPersonales.setVisibility(View.GONE)).start();
-//
-//        isMenuOpen = false;
-//    }
-
-//    private void abrirMenu() {
-//        fabRegistrarGasto.setVisibility(View.VISIBLE);
-//        fabRegistrarGasto.animate().translationY(-80f).alpha(1f).setDuration(300).start();
-//
-//        fabAddMeta.setVisibility(View.VISIBLE);
-//        fabAddMeta.animate().translationY(-140f).alpha(1f).setDuration(300).start();
-//
-//        fabNotasPersonales.setVisibility(View.VISIBLE);
-//        fabNotasPersonales.animate().translationY(-200f).alpha(1f).setDuration(300).start();
-//
-//        isMenuOpen = true;
-//    }
-
     private void configurarBarChart() {
-        graficaBarras.setTouchEnabled(true);  // Habilitar interacción táctil
-        graficaBarras.setPinchZoom(true);  // Habilitar zoom con gestos de pinza
-        graficaBarras.setScaleEnabled(true); // Permitir escalar el gráfico
-        graficaBarras.getDescription().setEnabled(false);  // Deshabilitar descripción predeterminada
-        graficaBarras.setDrawGridBackground(false); // Quitar fondo de cuadrícula
-        graficaBarras.setExtraOffsets(10, 10, 10, 10); // Añadir márgenes
+        graficaBarras.setTouchEnabled(true);
+        graficaBarras.setPinchZoom(true);
+        graficaBarras.setScaleEnabled(true);
+        graficaBarras.getDescription().setEnabled(false);
+        graficaBarras.setDrawGridBackground(false);
+        graficaBarras.setExtraOffsets(10, 10, 10, 10);
 
-        // Configurar el eje X
+
         XAxis xAxis = graficaBarras.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // Posición en la parte inferior
-        xAxis.setDrawGridLines(false); // Quitar líneas de cuadrícula del eje X
-        xAxis.setGranularity(1f); // Intervalo mínimo entre valores
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setGranularity(1f);
 
-        // Configurar el eje Y izquierdo
+
         YAxis leftAxis = graficaBarras.getAxisLeft();
-        leftAxis.setDrawGridLines(false); // Mostrar líneas de cuadrícula en el eje Y
-        leftAxis.setGranularityEnabled(true); // Habilitar granularidad para valores consecutivos
+        leftAxis.setDrawGridLines(false);
+        leftAxis.setGranularityEnabled(true);
 
-        // Deshabilitar el eje Y derecho (opcional)
+
         YAxis rightAxis = graficaBarras.getAxisRight();
         rightAxis.setEnabled(false);
 
-        // Configurar la leyenda
+
         Legend legend = graficaBarras.getLegend();
-        legend.setForm(Legend.LegendForm.NONE); // Representación en forma de cuadrados (para gráfico de barras)
-        legend.setTextSize(12f); // Tamaño de texto
-        legend.setTextColor(Color.BLACK); // Color del texto
+        legend.setForm(Legend.LegendForm.SQUARE);
+        legend.setTextSize(12f);
+        legend.setTextColor(Color.WHITE);
         legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
         legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
         legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        legend.setDrawInside(false); // Posición por fuera del gráfico
+        legend.setDrawInside(false);
 
-        // Cambiar el tipo de gráfico a BarChart
-        graficaBarras.setData(null); // Limpiar cualquier dato existente
 
-        // Configurar el gráfico de barras (BarChart)
-        BarDataSet barDataSet = new BarDataSet(getEntries(), "");
-        barDataSet.setColor(Color.rgb(91, 134, 184));  // Color de las barras
-        BarData barData = new BarData(barDataSet);
-        graficaBarras.setData(barData);  // Establecer los datos al gráfico de barras
-        graficaBarras.invalidate();  // Refrescar el gráfico
+        graficaBarras.setData(null);
+
+
     }
 
-    private List<BarEntry> getEntries() {
-        List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0f, 4f));  // X: 0, Y: 4
-        entries.add(new BarEntry(1f, 8f));  // X: 1, Y: 8
-        entries.add(new BarEntry(2f, 6f));  // X: 2, Y: 6
-        entries.add(new BarEntry(3f, 12f)); // X: 3, Y: 12
-        entries.add(new BarEntry(4f, 3f));  // X: 4, Y: 3
-        return entries;
-    }
 }

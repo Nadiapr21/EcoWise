@@ -102,6 +102,8 @@
             android:background="@drawable/circle_shape"
             android:paddingStart="30dp"
             android:drawableStart="@drawable/ic_back"
+            android:drawableTint="@color/white"
+            android:backgroundTint="@color/black"
             android:elevation="8dp"
             />
 

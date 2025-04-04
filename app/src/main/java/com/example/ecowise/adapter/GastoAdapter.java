@@ -24,9 +24,9 @@ public class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.GastoViewHol
     private RegistrarGasto registrarGasto;
 
     // Constructor único que recibe tanto el contexto como la lista de gastos
-    public GastoAdapter(RegistrarGasto registrarGasto, ArrayList<Gasto> listaGastos) {
+    public GastoAdapter(Context context, ArrayList<Gasto> listaGastos) {
         this.registrarGasto = registrarGasto;
-        this.context = registrarGasto.getApplicationContext();
+        this.context = context;
         this.listaGastos = listaGastos;
     }
 
@@ -48,22 +48,17 @@ public class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.GastoViewHol
         holder.tvFecha2.setText(gasto.getFecha());
 
         holder.ivEliminar2.setOnClickListener(v -> {
-            if (gasto.getId() != null && !gasto.getId().isEmpty()) {
-                // Solo eliminar si el id no es nulo
-                listaGastos.remove(position);
-                eliminarGastoFirestore(gasto.getId()); //ID del gasto
-
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position, listaGastos.size());
-
-                registrarGasto.eliminarGasto(gasto.getId());
-            }else{
-                Toast.makeText(context, "Error: el gasto no tiene un id válido", Toast.LENGTH_SHORT).show();
-            };
-
+            eliminarGasto(position, gasto.getId());
         });
+
     }
 
+    private void eliminarGasto(int position, String id) {
+        listaGastos.remove(position);
+        notifyItemRemoved(position);
+
+        eliminarGastoFirestore(id);
+    }
     private void eliminarGastoFirestore(String id) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -94,7 +89,7 @@ public class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.GastoViewHol
 
         public GastoViewHolder(View itemView) {
             super(itemView);
-            // Aquí hacemos el findViewById para las vistas del item
+
             tvCategoria2 = itemView.findViewById(R.id.tvCategoria2);
             tvImporte2 = itemView.findViewById(R.id.tvImporte2);
             tvFecha2 = itemView.findViewById(R.id.tvFecha2);

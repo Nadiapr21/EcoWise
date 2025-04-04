@@ -10,43 +10,17 @@
     tools:context=".ui.LoginActivity">
 
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="o"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnRegistro" />
-
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:gravity="center"
         android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/ivHuellaDactilar"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView">
-
-        <Button
-            android:id="@+id/btnGoogleLogin"
-            android:layout_width="248dp"
-            android:layout_height="48dp"
-            android:layout_marginBottom="10dp"
-            android:backgroundTint="@color/white"
-            android:drawableLeft="@drawable/ic_google_login"
-            android:paddingStart="15dp"
-            android:text="Login with Google"
-            android:isCredential="true"
-            android:textAllCaps="false"
-            android:textColor="@color/black"/>
-
-    </LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/btnRegistro" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -104,6 +78,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
+    <TextView
+        android:id="@+id/tvForgotPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="48sp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:text="¿Has olvidado tu contraseña?"
+        android:textColor="@color/white"
+        android:textColorLink="#F6F6F6"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnIniciarSesion"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etPassword" />
+
 
     <Button
         android:id="@+id/btnIniciarSesion"
@@ -122,7 +114,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.469" />
+        app:layout_constraintVertical_bias="0.499" />
 
     <Button
         android:id="@+id/btnRegistro"
@@ -136,22 +128,23 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.55" />
+        app:layout_constraintVertical_bias="0.568" />
 
     <ImageView
         android:id="@+id/ivHuellaDactilar"
-        android:layout_width="92dp"
-        android:layout_height="79dp"
-        android:layout_marginBottom="96dp"
+        android:layout_width="85dp"
+        android:layout_height="68dp"
         android:clickable="true"
         android:contentDescription="@string/huella_dactilar"
         android:focusable="true"
         android:src="@drawable/ic_fingerprint"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnRegistro" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

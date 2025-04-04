@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#151515"
+    tools:context=".ui.RegistrarGasto">
+
+    <EditText
+        android:id="@+id/etTitulo"
+        android:layout_width="0dp"
+        android:layout_height="48sp"
+        android:textColor="@color/backgroundColor"
+        android:background="@drawable/et_underline_black"
+        android:textColorHint="#A9A9A9"
+        android:fontFamily="@font/misans"
+        android:paddingLeft="16dp"
+        android:paddingTop="13dp"
+        android:hint="Título del recordatorio"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp" />
+
+    <EditText
+        android:id="@+id/etDescripcion"
+        android:layout_width="0dp"
+        android:layout_height="92dp"
+        android:paddingTop="16dp"
+        android:gravity="top"
+        android:background="@drawable/et_underline_black"
+        android:hint="Descripción"
+        android:fontFamily="@font/misans"
+        android:paddingLeft="16dp"
+        android:textColor="@color/backgroundColor"
+        android:textColorHint="#A9A9A9"
+        app:layout_constraintTop_toBottomOf="@id/etTitulo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp" />
+
+    <EditText
+        android:id="@+id/etFecha"
+        android:layout_width="0dp"
+        android:layout_height="48sp"
+        android:background="@drawable/et_underline_black"
+        android:paddingLeft="16dp"
+        android:paddingTop="13dp"
+        android:fontFamily="@font/misans"
+        android:textColor="@color/backgroundColor"
+        android:textColorHint="#A9A9A9"
+        android:focusable="false"
+        android:clickable="true"
+        android:hint="Fecha"
+        app:layout_constraintTop_toBottomOf="@id/etDescripcion"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp" />
+
+    <EditText
+        android:id="@+id/etImporte"
+        android:layout_width="0dp"
+        android:layout_height="48sp"
+        android:background="@drawable/et_underline_black"
+        android:paddingLeft="16dp"
+        android:paddingTop="13dp"
+        android:fontFamily="@font/misans"
+        android:textColor="@color/backgroundColor"
+        android:textColorHint="#A9A9A9"
+        android:hint="Importe"
+        app:layout_constraintTop_toBottomOf="@id/etFecha"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp" />
+
+    <EditText
+        android:id="@+id/etFrecuencia"
+        android:layout_width="0dp"
+        android:layout_height="48sp"
+        android:background="@drawable/et_underline_black"
+        android:paddingLeft="16dp"
+        android:paddingTop="13dp"
+        android:fontFamily="@font/misans"
+        android:textColor="@color/backgroundColor"
+        android:textColorHint="#A9A9A9"
+        android:hint="Frecuencia (Semanal, Mensual...)"
+        app:layout_constraintTop_toBottomOf="@id/etImporte"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/btnGuardar"
+        android:layout_width="110dp"
+        android:layout_height="48sp"
+        android:background="@drawable/rounded_guardar_button"
+        android:fontFamily="@font/misans"
+        android:paddingTop="10dp"
+        android:gravity="center_horizontal"
+        android:text="Guardar"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/etFrecuencia"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp" />
+
+    <Button
+        android:id="@+id/fabVolver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/circle_shape2"
+        android:contentDescription="@string/boton_volver"
+        android:drawableStart="@drawable/ic_back"
+        android:elevation="8dp"
+        android:gravity="center"
+        android:paddingStart="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="30dp"
+        android:layout_marginEnd="30dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
