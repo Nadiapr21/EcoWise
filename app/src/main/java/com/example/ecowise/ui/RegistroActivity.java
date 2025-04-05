@@ -24,6 +24,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.ecowise.SecurePreferences;
+import com.example.ecowise.sqlite.DBManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -255,6 +256,13 @@ public class RegistroActivity extends AppCompatActivity {
                                             Toast.makeText(RegistroActivity.this, "Usuario creado con éxito", Toast.LENGTH_SHORT).show();
                                             startActivity(new Intent(RegistroActivity.this, MainActivity.class));
                                             saveUserDataToSecurePrefs(userId, email);
+
+                                            DBManager dbManager = new DBManager(RegistroActivity.this);
+                                            dbManager.abrir();
+                                            dbManager.insertarUsuario(userId, nombre, email, null);
+                                            dbManager.cerrar();
+
+                                            Log.d("SQLite", "Usuario añadido a SQLite con éxito: " + userId);
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {

@@ -3,6 +3,7 @@ package com.example.ecowise.ui;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -11,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.ecowise.adapter.GastoAdapter;
+import com.example.ecowise.sqlite.DBManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -46,6 +48,7 @@ public class RegistrarGasto extends AppCompatActivity {
     private RecyclerView recyclerViewGastos;
     private GastoAdapter gastosAdapter;
     private Button fabVolver;
+    private DBManager dbManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,9 @@ public class RegistrarGasto extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        dbManager = new DBManager(this);
+        dbManager.abrir();
 
         //Inicializo el recyclerview
         recyclerViewGastos = findViewById(R.id.recyclerViewGastos);
@@ -184,6 +190,11 @@ public class RegistrarGasto extends AppCompatActivity {
                 .add(gastos)
                 .addOnSuccessListener(documentReference -> {
                     System.out.println("Gasto añadido con ID: " + documentReference);
+
+                    String gastoId = documentReference.getId(); // ID generado por Firestore
+                    FirebaseUser usuarioActual = FirebaseAuth.getInstance().getCurrentUser();
+                    String userId = usuarioActual != null ? usuarioActual.getUid() : "defaultUserId";
+                    dbManager.insertarGasto(gastoId, userId, importe, fecha, categoria);
                     listaGastos.add(new Gasto(importe, categoria, fecha));
                     actualizarGastoPresupuesto(importe);
                 })
@@ -248,4 +259,10 @@ public class RegistrarGasto extends AppCompatActivity {
 //                .addOnFailureListener(e -> System.out.println("Error al modificar el gasto: " + e.getMessage()));
 //    }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dbManager.cerrar();
+    }
 }

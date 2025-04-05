@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
@@ -49,6 +50,7 @@ import com.example.ecowise.activities.AnalisisActivity;
 import com.example.ecowise.activities.MetasActivity;
 import com.example.ecowise.activities.PresupuestoActivity;
 import com.example.ecowise.activities.RecordatoriosActivity;
+import com.example.ecowise.sqlite.DBHelper;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -100,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         EdgeToEdge.enable(this);
+
         FirebaseApp.initializeApp(this);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -107,6 +110,14 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        DBHelper dbHelper = new DBHelper(this);
+        try{
+            dbHelper.checkycopiarDB();
+        }catch (Exception e){
+            Log.e("MainActivity", "Error al copiar la base de datos: " + e.getMessage());
+        }
+
+        SQLiteDatabase SQLitedb = dbHelper.getWritableDatabase();
 
 
 

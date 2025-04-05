@@ -40,6 +40,7 @@ import androidx.credentials.exceptions.GetCredentialException;
 import androidx.credentials.exceptions.NoCredentialException;
 
 import com.example.ecowise.R;
+import com.example.ecowise.sqlite.DBManager;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
@@ -81,12 +82,8 @@ public class LoginActivity extends AppCompatActivity {
     private boolean isPasswordVisible = false; //Estado de la contraseña
     private ImageView ivHuellaDactilar;
     FirebaseUser user;
-    private Button btnGoogleLogin;
-    private CredentialManager credentialManager;
-    private GetPasswordOption getPasswordOption;
-    private GetPublicKeyCredentialOption getPublicKeyCredentialOption;
-    GetGoogleIdOption getGoogleIdOption;
     private TextView tvForgotPassword;
+    private DBManager dbManager;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -101,6 +98,8 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
+        dbManager = new DBManager(this);
+        dbManager.abrir(); //aqui se abre la base de datos
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
 
@@ -167,6 +166,10 @@ public class LoginActivity extends AppCompatActivity {
 
                                 if (user != null) {
                                     String userId = user.getUid();
+                                    String nombre = user.getDisplayName();
+                                    String fotoPerfil = user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : null;
+
+                                    dbManager.insertarUsuario(userId, nombre != null ? nombre : "Usuario", email, fotoPerfil);
                                     Log.d("FirebaseUser", "El userId del usuario actual es: " + userId);
                                     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -237,7 +240,61 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     Log.d("Firestore", "Datos de la colección " + coleccion + " recuperados correctamente.");
                             for (DocumentSnapshot document : queryDocumentSnapshots) {
-                                Log.d("Firestore", coleccion + ": " + document.getData());
+                                Map<String, Object> data = document.getData();
+                                switch (coleccion) {
+                                    case "recordatorios":
+                                        String recordatorioId = document.getId();
+                                        String tituloRecordatorio = (String) data.get("titulo");
+                                        String descripcion = (String) data.get("descripcion");
+                                        Double importeRecordatorio = (Double) data.get("importe");
+                                        String fechaRecordatorio = (String) data.get("fecha");
+                                        String frecuencia = (String) data.get("frecuencia");
+
+                                        dbManager.insertarRecordatorio(recordatorioId, tituloRecordatorio, descripcion, importeRecordatorio, fechaRecordatorio, frecuencia, userId);
+                                        break;
+
+                                    case "presupuestos":
+                                        String presupuestoId = document.getId();
+                                        Double gastoActual = (Double) data.get("gasto_actual");
+                                        Double presupuestoMax = (Double) data.get("presupuesto_max");
+
+                                        dbManager.insertarPresupuesto(presupuestoId, gastoActual, presupuestoMax, userId);
+                                        break;
+
+                                    case "notas":
+                                        String notaId = document.getId();
+                                        String tituloNota = (String) data.get("titulo");
+                                        String contenido = (String) data.get("contenido");
+                                        String fechaCreacion = (String) data.get("fecha_creacion");
+
+                                        dbManager.insertarNota(notaId, tituloNota, contenido, fechaCreacion, userId);
+                                        break;
+
+                                    case "metas":
+                                        String metaId = document.getId();
+                                        String tituloMeta = (String) data.get("titulo");
+                                        Double importeObjetivo = (Double) data.get("importe_objetivo");
+                                        Double importeAhorrado = (Double) data.get("importe_ahorrado");
+                                        String fechaLimite = (String) data.get("fecha_limite");
+                                        String estado = (String) data.get("estado");
+                                        Double progresoMeta = (Double) data.get("progreso_meta");
+
+                                        dbManager.insertarMeta(metaId, tituloMeta, importeObjetivo, importeAhorrado, fechaLimite, estado, progresoMeta, userId);
+                                        break;
+
+                                    case "gastos":
+                                        String gastoId = document.getId();
+                                        String categoria = (String) data.get("categoria");
+                                        Double importeGasto = (Double) data.get("importe");
+                                        String fechaGasto = (String) data.get("fecha");
+
+                                        dbManager.insertarGasto(gastoId, userId, importeGasto, fechaGasto, categoria);
+                                        break;
+
+                                    default:
+                                        Log.w("Firestore", "Colección desconocida: " + coleccion);
+                                        break;
+                                }
                             }
                 })
                 .addOnFailureListener(e -> {
@@ -320,18 +377,32 @@ public class LoginActivity extends AppCompatActivity {
     //Metodo para cerrar sesion
     public void logoutUser() {
         mAuth.signOut();
+        dbManager.cerrar();
     }
 
     //Metodo para registrar a un nuevo usuario
-    public void registerUser(String email, String password) {
+    public void registrarUsuario(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                             if (task.isSuccessful()) {
                                 Log.d("TAG", "createUserWithEmail:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
+
+                                if (user != null) {
+                                    String userId = user.getUid();
+                                    String nombre = user.getDisplayName() != null ? user.getDisplayName() : "Usuario";
+                                    String fotoPerfil = user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : null;
+
+                                    DBManager dbManager = new DBManager(this);
+                                    dbManager.abrir();
+                                    dbManager.insertarUsuario(userId, nombre, email, fotoPerfil);
+                                    dbManager.cerrar();
+
+                                    Log.d("TAG", "Usuario registrado en SQLite con userId: " + userId);
+                                }
                             } else {
                                 Log.w("TAG", "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "Autenticación fallida.", Toast.LENGTH_SHORT).show();
                             }
 
                         }
@@ -358,5 +429,11 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         return esValido;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dbManager.cerrar();
     }
 }
