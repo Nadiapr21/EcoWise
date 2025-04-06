@@ -194,7 +194,10 @@ public class RegistrarGasto extends AppCompatActivity {
                     String gastoId = documentReference.getId(); // ID generado por Firestore
                     FirebaseUser usuarioActual = FirebaseAuth.getInstance().getCurrentUser();
                     String userId = usuarioActual != null ? usuarioActual.getUid() : "defaultUserId";
+                    dbManager.abrir();
                     dbManager.insertarGasto(gastoId, userId, importe, fecha, categoria);
+                    Log.d("SQLite", "Gasto insertado: " + gastoId + ", " + importe + ", " + categoria + ", " + fecha);
+                    dbManager.cerrar();
                     listaGastos.add(new Gasto(importe, categoria, fecha));
                     actualizarGastoPresupuesto(importe);
                 })
@@ -242,6 +245,8 @@ public class RegistrarGasto extends AppCompatActivity {
 
     }
 
+
+
 //    public void modificarGasto(String id, double nuevoImporte, String nuevaCategoria, String nuevaFecha) {
 //        FirebaseFirestore db = FirebaseFirestore.getInstance();
 //
@@ -265,4 +270,6 @@ public class RegistrarGasto extends AppCompatActivity {
         super.onDestroy();
         dbManager.cerrar();
     }
+
+
 }

@@ -99,6 +99,10 @@ public class DBManager {  //Aqui manejo las operaciones que interactuan con la b
         }
     }
 
+    public Cursor obtenerGastos() {
+        return db.rawQuery("SELECT * FROM gastos", null);
+    }
+
     public Cursor obtenerGastosPorUsuario(String userId) {
         return db.rawQuery("SELECT * FROM gastos WHERE userId = ?", new String[]{userId});
     }

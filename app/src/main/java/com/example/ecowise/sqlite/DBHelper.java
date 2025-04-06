@@ -43,7 +43,7 @@ public class DBHelper extends SQLiteOpenHelper {  //Aqui defino la estructura de
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS usuarios (" +
-                "userId TEXT PRIMARY KEY, " +
+                "userSQLiteId TEXT PRIMARY KEY, " +
                 "nombre TEXT, " +
                 "email TEXT, " +
                 "fotoPerfil TEXT)");

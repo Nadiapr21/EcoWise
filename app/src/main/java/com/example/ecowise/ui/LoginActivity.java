@@ -168,8 +168,9 @@ public class LoginActivity extends AppCompatActivity {
                                     String userId = user.getUid();
                                     String nombre = user.getDisplayName();
                                     String fotoPerfil = user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : null;
-
+                                    dbManager.abrir();
                                     dbManager.insertarUsuario(userId, nombre != null ? nombre : "Usuario", email, fotoPerfil);
+                                    dbManager.cerrar();
                                     Log.d("FirebaseUser", "El userId del usuario actual es: " + userId);
                                     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
